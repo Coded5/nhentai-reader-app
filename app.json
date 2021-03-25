@@ -1,0 +1,12 @@
+{
+  "name": "nh-reader",
+  "displayName": "nh-reader",
+  "expo": {
+    "name": "nh-reader",
+    "slug": "nh-reader",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
