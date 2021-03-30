@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, NativeModules, Image, TouchableOpacity, Alert } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
+import {ReactNativeZoomableView}  from '@dudigital/react-native-zoomable-view';
 
 import Header from '../components/header';
 
@@ -8,6 +9,10 @@ class Reader extends Component {
      state = {
           page: 0,
           showDialog: false
+     }
+
+     componentDidMount() {
+          //TODO: preload image (somehow)
      }
      
      askGoto = (input) => {
@@ -44,16 +49,11 @@ class Reader extends Component {
      formatFile = (page) => {
           const { Dir } = NativeModules;
           
-          
           //format page number
           const maxPageDigit = 1 + Math.floor(Math.log10(this.props.reading.num_page));
           const p = ('000000000000000'+page).substr(-maxPageDigit);
 
-          const location = "file:///" + Dir.getFilesDir() + "/"+ this.props.reading.id + "/" + p + this.props.reading.prefix;
-          
-          return (
-               <Image source={{uri : location}} style={{width : "100%", height: "100%", resizeMode: 'contain'}} />
-          );
+          return "file:///" + Dir.getFilesDir() + "/"+ this.props.reading.id + "/" + p + this.props.reading.prefix;
      }
 
      render() {
@@ -66,7 +66,16 @@ class Reader extends Component {
                               <Text style={styles.white_text}>Page : {this.state.page + 1} / {this.props.reading.num_page}</Text>
                          </View>
                          <View style={styles.body}>
-                              {this.formatFile(this.state.page)}
+                              <ReactNativeZoomableView
+                                   maxZoom={5}
+                                   minZoom={1}
+                                   zoomStep={0.5}
+                                   initialZoom={1}
+                                   bindToBorders={true}
+                              >
+                                   <Image source={{uri : this.formatFile(this.state.page)}} style={{width : "100%", height: "100%", resizeMode:"contain"}} />
+                    
+                              </ReactNativeZoomableView>
                          </View>
                          <View style={styles.bottom}>
                               <TouchableOpacity style={styles.page_button} onPress={() => {this.goto(0)}}>
@@ -109,6 +118,7 @@ const styles = StyleSheet.create({
           flex: 1
      },
      body: {
+          backgroundColor: '#3c3c3c',
           flex: 8
      },
      bottom: {

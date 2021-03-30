@@ -6,9 +6,19 @@ class Header extends Component {
      render() { 
           return (
                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                         <Text style={styles.white_text}> {"< Go back"} </Text>
-                    </TouchableOpacity>
+                    {
+                         (this.props.goto === undefined) ? 
+                         (
+                              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                                   <Text style={styles.white_text}> {"< Go back"} </Text>
+                               </TouchableOpacity>
+                         ) : 
+                         (
+                              <TouchableOpacity onPress={() => this.props.navigation.navigate(this.props.goto)}>
+                                   <Text style={styles.white_text}> {this.props.goto} </Text>
+                               </TouchableOpacity>
+                         )
+                    }
                     <Text style={styles.white_text}>{this.props.name}</Text>
                </View>
           );

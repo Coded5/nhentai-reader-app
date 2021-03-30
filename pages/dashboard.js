@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, Button, FlatList, TouchableOpacity } from 'react-native';
+import Header from '../components/header';
 
 class Dashboard extends Component {
      state = {  }
@@ -19,9 +20,7 @@ class Dashboard extends Component {
      render() {
           return (
                <React.Fragment>
-                    <View style={styles.header}>
-                         <Text style={styles.white_text}>Home</Text>
-                    </View>
+                    <Header navigation={this.props.navigation} goto={"Help"} />
                     <View style={styles.container}>
                          <View style={{padding: 20}}>
                               {

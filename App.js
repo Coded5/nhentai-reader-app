@@ -8,13 +8,17 @@ import * as RNFS from 'react-native-fs';
 import Dashboard from './pages/dashboard';
 import Download from './pages/download';
 import Reader from './pages/reader';
+import Help from './pages/help';
 
 const Stack = createStackNavigator();
 
 class App extends Component {
      state = {
           nh_list: [],
-          reading: -1
+          reading: -1,
+          settings: {
+               //download path, high/low quality download, (maybe) preload, (maybe) auto backup
+          }
      }
      
      read = (x) => {
@@ -44,7 +48,7 @@ class App extends Component {
           console.log("UPDATE");
           const { Dir } = NativeModules;
           let nh = await Dir.listAllDownloaded();
-          this.state.nh_list = []
+          this.state.nh_list = [];
 
           let p = 0;
           nh.forEach(i => {
@@ -77,6 +81,9 @@ class App extends Component {
                               </Stack.Screen>
                               <Stack.Screen name="Reader">
                                    {props => <Reader {...props} reading={this.state.reading} style={styles.body_container} />}
+                              </Stack.Screen>
+                              <Stack.Screen name="Help">
+                                   {props => <Help {...props} />}
                               </Stack.Screen>
                          </Stack.Navigator>
                     </NavigationContainer>

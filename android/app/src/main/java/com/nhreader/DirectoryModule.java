@@ -1,5 +1,6 @@
 package com.nhreader;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import com.facebook.react.bridge.*;
 
