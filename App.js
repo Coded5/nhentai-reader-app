@@ -1,5 +1,6 @@
+import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, NativeModules, TouchableOpacity} from 'react-native';
+import { StyleSheet , View, NativeModules } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as RNFS from 'react-native-fs';
@@ -8,16 +9,11 @@ import Dashboard from './pages/dashboard';
 import Download from './pages/download';
 import Reader from './pages/reader';
 
-const DASHBOARD = 0;
-const DOWNLOAD = 1;
-const READER = 2;
-
 const Stack = createStackNavigator();
 
 class App extends Component {
      state = {
           nh_list: [],
-          page: DASHBOARD,
           reading: -1
      }
      
@@ -36,14 +32,6 @@ class App extends Component {
           }).catch(err => {
                console.log(err);
           });
-     }
-
-     goToView = (x) => {
-          this.setState({
-               reading: x,
-               page: READER
-          });
-          
      }
 
      //list all nh
@@ -90,7 +78,6 @@ class App extends Component {
                               <Stack.Screen name="Reader">
                                    {props => <Reader {...props} reading={this.state.reading} style={styles.body_container} />}
                               </Stack.Screen>
-                                   
                          </Stack.Navigator>
                     </NavigationContainer>
                </View>

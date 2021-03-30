@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, Button, FlatList, TouchableOpacity } from 'react-native';
-import { color } from 'react-native-reanimated';
-import Header from '../components/header';
 
 class Dashboard extends Component {
      state = {  }
-
-     gotoDownload = () => {
-          
-     }
 
      renderItem = ({item}) => {
           return (
@@ -21,8 +15,8 @@ class Dashboard extends Component {
                </TouchableOpacity>
           );
      }
+     
      render() {
-          console.log(this.props.nh.length);
           return (
                <React.Fragment>
                     <View style={styles.header}>
@@ -32,11 +26,15 @@ class Dashboard extends Component {
                          <View style={{padding: 20}}>
                               {
                                    (this.props.nh.length !== 0) ? (
-                                        <FlatList 
-                                             data={this.props.nh}
-                                             renderItem={this.renderItem}
-                                             keyExtractor={item => ""+item.id}
-                                        />
+                                        <React.Fragment>
+                                             <FlatList 
+                                                  data={this.props.nh}
+                                                  renderItem={this.renderItem}
+                                                  keyExtractor={item => ""+item.id}
+                                             />
+
+                                             
+                                        </React.Fragment>
                                    ) : (
                                         <View style={styles.nothing}>
                                              <Text style={{color: '#fff', margin: '2%'}}>Theres nothing yet</Text>
@@ -50,6 +48,9 @@ class Dashboard extends Component {
                               }
                          </View>     
                     </View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Download")} style={styles.add}>
+                         <Text style={{color: '#fff', fontSize: 25}}>+</Text>
+                    </TouchableOpacity>
                </React.Fragment>
           );
      }
@@ -84,6 +85,18 @@ const styles = StyleSheet.create({
           flex: 13,
           padding: 0,
           backgroundColor: '#3c3c3c'
+     },
+     add : {
+          width: 50,
+          height: 50,
+          padding: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 100,
+          backgroundColor: '#ed2553',
+          position: 'absolute',
+          bottom: '5%',
+          right: '5%' 
      }
 });
  

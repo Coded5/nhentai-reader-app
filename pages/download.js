@@ -142,7 +142,7 @@ class Download extends Component {
           } else {
                return (
                     <React.Fragment>
-                         <Text style={styles.white_text}>Finished downloading!</Text>
+                         <Text style={{color: '#fff', padding: 0, margin: 0}}>Finished downloading!</Text>
                          <Button title="Read now" onPress={() => {
                               this.props.onChangeRead(this.state.query_result)
                               this.props.navigation.navigate("Reader");
@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
      thumbnail: {
           width: "56%",
           height: "80%",
-          margin: "1%",
           alignItems: 'center',
           resizeMode: 'contain'
      },

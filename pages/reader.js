@@ -52,7 +52,7 @@ class Reader extends Component {
           const location = "file:///" + Dir.getFilesDir() + "/"+ this.props.reading.id + "/" + p + this.props.reading.prefix;
           
           return (
-               <Image source={{uri : location}} style={{width : "100%", height: "100%"}} />
+               <Image source={{uri : location}} style={{width : "100%", height: "100%", resizeMode: 'contain'}} />
           );
      }
 
