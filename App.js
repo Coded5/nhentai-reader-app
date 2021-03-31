@@ -29,7 +29,7 @@ class App extends Component {
 
      delete = (x) => {
           const { Dir } = NativeModules;
-
+          
           RNFS.unlink(Dir.getFilesDir() + "/" + x.id).then(() => {
                console.log("DELETED " + x.id);
                this.update();
@@ -50,19 +50,28 @@ class App extends Component {
           let nh = await Dir.listAllDownloaded();
           this.state.nh_list = [];
 
+          
+
           let p = 0;
           nh.forEach(i => {
-               RNFS.readFile(i+"/metadata.json").then(r => {
-                    var parsed = JSON.parse(r);
-                    this.state.nh_list.push(parsed);
+               console.log("READ " + i);
+               
+               if(/^[0-9]+$/.test(i.split('/')[i.split('/').length-1])) {
+                    RNFS.readFile(i+"/metadata.json").then(r => {
+                         var parsed = JSON.parse(r);
+                         this.state.nh_list.push(parsed);
+                         p++;
+                         if(p >= nh.length) {
+                              console.log('UPDATE GUI');
+                              this.forceUpdate();
+                         }
+                    }).catch(err => {
+                         console.log(err);
+                    })
+               } else {
                     p++;
-                    if(p >= nh.length) {
-                         console.log('UPDATE GUI');
-                         this.forceUpdate();
-                    }
-               }).catch(err => {
-                    console.log(err);
-               })
+                    console.log("READ SKIPPED " + i);
+               }
           });
 
           if(nh.length === 0) this.forceUpdate(); //edge case

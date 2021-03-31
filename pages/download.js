@@ -89,6 +89,8 @@ class Download extends Component {
           //Write metadata
           const metadata = JSON.stringify(query_result);
 
+          console.log("DOWNLOAD Write files at " + base_dir);
+
           RNFS.writeFile(base_dir + "/metadata.json", metadata, 'utf8').then(s => {
                console.log("Successfully created metadata");
           }).catch(e => {

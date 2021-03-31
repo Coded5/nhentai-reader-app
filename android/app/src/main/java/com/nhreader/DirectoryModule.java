@@ -1,7 +1,13 @@
 package com.nhreader;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
+import androidx.annotation.RequiresApi;
 import com.facebook.react.bridge.*;
 
 import java.io.File;
@@ -16,6 +22,21 @@ public class DirectoryModule extends ReactContextBaseJavaModule {
     @ReactMethod(isBlockingSynchronousMethod = true)
     public String getFilesDir() {
         return getReactApplicationContext().getFilesDir().getAbsolutePath();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public String testDownloadWrite() {
+        ContentResolver resolver = getReactApplicationContext().getContentResolver();
+
+        Uri collection;
+        collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+
+        ContentValues file = new ContentValues();
+        file.put(MediaStore.Downloads.DISPLAY_NAME, "test.txt");
+        Uri result = resolver.insert(collection, file);
+        Log.d(getName(), result.getPath());
+        return result.getPath();
     }
 
     @ReactMethod
