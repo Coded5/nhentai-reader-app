@@ -4,6 +4,8 @@ import Header from '../components/header';
 import * as RNFS from 'react-native-fs';
 import * as Progress from 'react-native-progress';
 
+import { download } from '../components/download_manager';
+
 const NOT_DOWNLOAD = -1;
 const DOWNLOADING = 0;
 const FINISH = 1;
@@ -12,9 +14,10 @@ class Download extends Component {
      state = {
           query: "",
           download_status: {
-               status: -1, //-1 not download, 0 downloading, 1 finish
+               status: NOT_DOWNLOAD,
                progress: 0
-          }
+          },
+          on_download_error: false
      }
 
      //update search query
@@ -38,9 +41,15 @@ class Download extends Component {
           });
           const { NHRequest } = NativeModules;
 
+          console.log("QUERY Searching for " + this.state.query);
           const rawdata = NHRequest.getNH(this.state.query);
-
+          if(rawdata === "") {
+               console.log("ERROR unable to connect to nhentai");
+               this.setState({query_result: {error: "Unable to connect to nhentai server"}});
+               return;
+          }
           try {
+               
                const data = JSON.parse(rawdata);
                const p = data.images.pages;
                
@@ -60,6 +69,7 @@ class Download extends Component {
                     }
                });
           } catch (error) {
+               console.log(error);
                this.setState({query_result: {error: "Not found"}});
                
           }
@@ -104,13 +114,7 @@ class Download extends Component {
                const path = base_dir + "/" + this.formatPage(i) + query_result.prefix;
                const url = "https://i.nhentai.net/galleries/"+query_result.media_id+"/"+(i+1)+query_result.prefix;
                //Download
-               RNFS.downloadFile({
-                    fromUrl: url,
-                    toFile: path
-               }).promise.then(r => {
-
-                    //update progress
-                    console.log("DOWNLOADING " + progress + " " + url + " " + r.statusCode);
+               download(url, path, 2, 0).then(r => {
                     progress++;
                     if(progress === query_result.num_page) {
                          this.setState({
@@ -130,8 +134,26 @@ class Download extends Component {
                     }
                }).catch(err => {
                     console.log(err);
+                    //handle error
+                    progress++;
+                    if(progress === query_result.num_page) {
+                         this.setState({
+                              download_status: {
+                                   status: FINISH,
+                                   progress: progress
+                              }
+                         });
+                         this.props.onUpdate();
+                    } else {
+                         this.setState({
+                              download_status: {
+                                   status: DOWNLOADING,
+                                   progress: progress
+                              }
+                         });
+                    }
                });
-
+               
                await new Promise(r => setTimeout(r, 50));
           }
      }

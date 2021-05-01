@@ -10,10 +10,6 @@ class Reader extends Component {
           page: 0,
           showDialog: false
      }
-
-     componentDidMount() {
-          //TODO: preload image (somehow)
-     }
      
      askGoto = (input) => {
           this.setState({showDialog: false});
@@ -35,15 +31,15 @@ class Reader extends Component {
           if(p < 0 || p >= this.props.reading.num_page) {
                return;
           }
-          else this.setState({page : p})
+          else this.setState({page : p});
      }
 
      move = (o) => {
           if(this.state.page + o < 0 || this.state.page + o >= this.props.reading.num_page) {
-               console.log('error returning');
+               console.log('ERROR page doesn\'t exist returning');
                return;
           }
-          else this.setState({page : this.state.page + o})
+          else this.setState({page : this.state.page + o});
      }
 
      formatFile = (page) => {
@@ -62,8 +58,11 @@ class Reader extends Component {
                     <Header navigation={this.props.navigation} name="Read"/>
                     <View style={styles.container}>
                          <View style={styles.header}>
-                              <Text style={styles.white_text}>{this.props.reading.title.english}</Text>
-                              <Text style={styles.white_text}>Page : {this.state.page + 1} / {this.props.reading.num_page}</Text>
+                              <Text style={styles.white_text}>{this.props.reading.title.pretty}</Text>
+                              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                   <Text style={styles.white_text}>#{this.props.reading.id}</Text>
+                                   <Text style={styles.white_text}>Page : {this.state.page + 1} / {this.props.reading.num_page}</Text>
+                              </View>
                          </View>
                          <View style={styles.body}>
                               <ReactNativeZoomableView
